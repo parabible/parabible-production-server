@@ -1,0 +1,23 @@
+{
+  "name": "parabible-gcp",
+  "version": "1.0.0",
+  "description": "parabible gcp server on node",
+  "main": "main.js",
+  "scripts": {
+    "start": "node build/main.js",
+    "build": "babel --presets es2015 --source-maps inline src -d build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Cuénod",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.24.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "compression": "^1.7.0",
+    "cors": "^2.8.4",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.30"
+  }
+}
