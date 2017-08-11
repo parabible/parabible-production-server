@@ -23,12 +23,18 @@ const declare_ready = (thing) => {
 	}
 }
 
-// const url = 'mongodb://localhost:27017/parabible'
+// const url = 'mongodb://localhost:27017/npmong'
 const url = 'mongodb://gcpadmin:thisisaninsecurepassword@127.0.0.1:27017/parabible'
 let mongoConnection = null;
 MongoClient.connect(url, (err, db) => {
-	mongoConnection = db
-	declare_ready("mongo")
+	if (err) {
+		console.log("Error setting up mongo connection")
+		console.log(err)
+	}
+	else {
+		mongoConnection = db
+		declare_ready("mongo")
+	}
 })
 
 let app = express()
@@ -69,7 +75,6 @@ app.post(['/api', '/api/*'], (req, res) => {
 			// response = termSearch(params) 
 			break
 		case "chapter-text":
-		console.log(params)
 			responsePromise = chapterText(params, mongoConnection)
 			break
 		default:
