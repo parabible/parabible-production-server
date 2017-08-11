@@ -13,13 +13,15 @@ const consoleLog = (...debug) => {
 }
 
 const heatUpVerseWords = (verse_words, hot_set, lukewarm_set) => {
-	return verse_words.map(w => {
-		if (hot_set.has(w["wid"]))
-			w["temperature"] = 2
-		else if (lukewarm_set.has(w["wid"]))
-			w["temperature"] = 1
-		return w
-	})
+	return verse_words.map(accentUnit => 
+		accentUnit.map(w => {
+			if (hot_set.has(w["wid"]))
+				w["temperature"] = 2
+			else if (lukewarm_set.has(w["wid"]))
+				w["temperature"] = 1
+			return w
+		})
+	)
 }
 
 const _queryForWids = ({queryArray, search_range}) => {
@@ -73,6 +75,13 @@ const termSearch = (params, db)=> {
 		consoleLog("BENCHMARK: now formulating final data", process.hrtime(starttime))
 		const ridmatches = range_matches.reduce((c, n) => c.concat(...range_node_data[n]["rids"]), [])
 		ridlistText(ridmatches, new Set(["wlc", "net"]), db).then((ridMatchText) => {
+			Object.keys(ridMatchText).forEach(rid => {
+				ridMatchText[rid]["wlc"] = heatUpVerseWords(
+					ridMatchText[rid]["wlc"],
+					actual_matching_words_set,
+					words_in_matching_ranges_set
+				)
+			})
 			consoleLog("BENCHMARK: results now being processed", process.hrtime(starttime))
 			const match_result_data = range_matches.map((m) => {
 				return {
