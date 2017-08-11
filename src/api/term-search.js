@@ -3,13 +3,15 @@ import { ridlistText } from './chapter-text'
 
 import word_data from '../../data/word_data_map'
 import tree_data from '../../data/tree_data'
-// import verse_data from '..../../data/verse_data'
 import range_node_data from '../../data/range_node_data'
-// import wid_to_rid from '..../../data/wid_to_rid'
 
+const doLog = false
+const consoleLog = (...debug) => {
+	if (doLog) {
+		console.log(...debug)
+	}
+}
 
-// const verseTextFromNode = (n) => range_node_data[n]["rids"].reduce((c,v) => c.concat(verse_data[v]["verse_text"]), [])
-// const parallelTextFromNode = (n) => range_node_data[n]["rids"].reduce((c,v) => c + verse_data[v]["parallel_text"], "")
 const heatUpVerseWords = (verse_words, hot_set, lukewarm_set) => {
 	return verse_words.map(w => {
 		if (hot_set.has(w["wid"]))
@@ -26,7 +28,7 @@ const _queryForWids = ({queryArray, search_range}) => {
 	let current_match = -1
 	let starttime = process.hrtime()
 	queryArray.forEach((query) => {
-		console.log("BENCHMARK Q: foreach cycle ", process.hrtime(starttime))
+		consoleLog("BENCHMARK Q: foreach cycle ", process.hrtime(starttime))
 		let invert = false
 		if ("invert" in query) {
 			if (query["invert"] == "t") {
@@ -45,33 +47,33 @@ const _queryForWids = ({queryArray, search_range}) => {
 		else
 			word_matches.push(intersected_query_matches)
 	})
-	console.log("BENCHMARK Q: done with foreach", process.hrtime(starttime))
+	consoleLog("BENCHMARK Q: done with foreach", process.hrtime(starttime))
 
 	const sr_matches = word_matches.map(m => m.map(n => tree_data[n][search_range]))
 	const sr_exclusions = exclusions.map(m => m.map(n => tree_data[n][search_range]))
 	const match_intersection = arrayIntersect(...sr_matches)
 	const range_matches = arrayDiff(match_intersection, sr_exclusions)
-	console.log("BENCHMARK Q: done intersecting", process.hrtime(starttime))
-	console.log("RESULTS:", range_matches.length)
+	consoleLog("BENCHMARK Q: done intersecting", process.hrtime(starttime))
+	consoleLog("RESULTS:", range_matches.length)
 	return { word_matches, range_matches }
 }
 
 const termSearch = (params, db)=> {
 	return new Promise((resolve, reject) => {
 		let starttime = process.hrtime()
-		console.log("BENCHMARK: starting now", process.hrtime(starttime))
+		consoleLog("BENCHMARK: starting now", process.hrtime(starttime))
 		const { word_matches, range_matches } = _queryForWids({
 			queryArray: params["query"],
 			search_range: params["search_range"] || "clause"
 		})
 		const words_in_matching_ranges_set = new Set(range_matches.reduce((c, m) => c.concat(...range_node_data[m]["wids"]), []))
-		console.log("BENCHMARK: getting matching word sets", process.hrtime(starttime))
+		consoleLog("BENCHMARK: getting matching word sets", process.hrtime(starttime))
 		const actual_matching_words_set = new Set(arrayIntersect(Array.prototype.concat(...word_matches), words_in_matching_ranges_set))
 
-		console.log("BENCHMARK: now formulating final data", process.hrtime(starttime))
+		consoleLog("BENCHMARK: now formulating final data", process.hrtime(starttime))
 		const ridmatches = range_matches.reduce((c, n) => c.concat(...range_node_data[n]["rids"]), [])
 		ridlistText(ridmatches, new Set(["wlc", "net"]), db).then((ridMatchText) => {
-			console.log("BENCHMARK: results now being processed", process.hrtime(starttime))
+			consoleLog("BENCHMARK: results now being processed", process.hrtime(starttime))
 			const match_result_data = range_matches.map((m) => {
 				return {
 					"node": m,
@@ -85,7 +87,7 @@ const termSearch = (params, db)=> {
 				"results": match_result_data
 			}
 			resolve(response)
-			console.log("BENCHMARK: done", process.hrtime(starttime))
+			consoleLog("BENCHMARK: done", process.hrtime(starttime))
 		}).catch()
 	})
 }
@@ -114,20 +116,4 @@ const collocationSearch = (params)=> {
 	})
 }
 
-const chapterText = (minv, maxv) => {
-	return new Promise((resolve, reject) => {
-		const ridlist = Array.from({length: maxv-minv}, (v, k) => k+minv)
-		const response = ridlist.reduce((c,v) => {
-			if (!verse_data.hasOwnProperty(v)) return c
-			console.log("c:",c)
-			c.push({
-				"verse": v % 1000,
-				"words": verse_data[v]["verse_text"].sort((a,b) => a.wid - b.wid)
-			})
-			return c
-		}, [])
-		resolve(response)
-	})
-}
-
-export { termSearch, chapterText, collocationSearch }
+export { termSearch, collocationSearch }
