@@ -4,7 +4,8 @@
   "description": "parabible gcp server on node",
   "main": "main.js",
   "scripts": {
-    "start": "npm run build && node build/main.js",
+    "start": "node build/main.js",
+    "dev": "npm run build && node build/main.js",
     "build": "babel --presets es2015 --source-maps inline src -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
