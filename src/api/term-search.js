@@ -73,20 +73,10 @@ const termSearch = (params, db)=> {
 		ridlistText(ridmatches, new Set(["wlc", "net"]), db).then((ridMatchText) => {
 			console.log("BENCHMARK: results now being processed", process.hrtime(starttime))
 			const match_result_data = range_matches.map((m) => {
-				let wlc_words = []
-				let p_text = ""
-				range_node_data[m]["rids"].forEach(rid => {
-					wlc_words.push(...ridMatchText[rid]["wlc"])
-					p_text += ridMatchText[rid]["net"]
-				})
 				return {
 					"node": m,
 					"verses": range_node_data[m]["rids"],
-					"wlc": heatUpVerseWords(
-						wlc_words,
-						actual_matching_words_set,
-						words_in_matching_ranges_set),
-					"net": p_text
+					"text": range_node_data[m]["rids"].map(rid => ({[rid]: ridMatchText[rid]}))
 				}
 			})
 
