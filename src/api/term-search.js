@@ -84,10 +84,14 @@ const termSearch = (params, db)=> {
 			})
 			consoleLog("BENCHMARK: results now being processed", process.hrtime(starttime))
 			const match_result_data = range_matches.map((m) => {
+				const ridTextObject = {}
+				range_node_data[m]["rids"].forEach(rid => {
+					ridTextObject[rid] = ridMatchText[rid]
+				})
 				return {
 					"node": m,
 					"verses": range_node_data[m]["rids"],
-					"text": range_node_data[m]["rids"].map(rid => ({[rid]: ridMatchText[rid]}))
+					"text": ridTextObject
 				}
 			})
 
