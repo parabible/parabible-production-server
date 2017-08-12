@@ -102,4 +102,41 @@ app.post(['/api', '/api/*'], (req, res) => {
 	})
 })
 
-app.use(express.static('client/build'))
+
+const getUrl = (mobile) => {
+	if (mobile)
+		return 'client/mobile.html'
+	else
+		return 'client/index.html'
+}
+const needsFonts = (userAgent) => {
+	// technically this is not mobile - it's whether or not to dump fonts into the index.html
+	const regexForMobile = {
+		// Windows: /windows nt/i,
+		WindowsPhone: /windows phone/i,
+		// Mac: /macintosh/i,
+		// Linux: /linux/i,
+		Wii: /wii/i,
+		Playstation: /playstation/i,
+		iPad: /ipad/i,
+		iPod: /ipod/i,
+		iPhone: /iphone/i,
+		Android: /android/i,
+		Blackberry: /blackberry/i,
+		Samsung: /samsung/i,
+		// Curl: /curl/i
+		Mobile: /mobile/i
+	}
+	return Object.keys(regexForMobile).reduce((a, k) =>
+		a || regexForMobile[k].test(userAgent),
+	false)
+}
+
+// Route order matters - the first listed will be invoked
+app.get("/", (req, res) => {
+	res.sendfile(getUrl(needsFonts(req.headers["user-agent"])))
+})
+app.use(express.static('client/'))
+app.get("*", (req, res) => {
+	res.sendfile(getUrl(needsFonts(req.headers["user-agent"])))
+})
