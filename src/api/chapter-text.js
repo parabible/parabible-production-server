@@ -1,4 +1,5 @@
 import book_names from '../../data/book_names.json'
+import { _wordsThatMatchQuery } from './term-search'
 
 const ridlistText = (ridlist, requestedTextsSet, db) => {
 	return new Promise((resolve, reject) => {
@@ -24,22 +25,34 @@ const ridlistText = (ridlist, requestedTextsSet, db) => {
 }
 
 const chapterText = (params, db) => {
+	const ref = params.reference
+
 	let requestedTexts = new Set(params["texts"] || [])
-	console.log(requestedTexts)
 	if (!requestedTexts.has("wlc") && 
 			!requestedTexts.has("net") && 
 			!requestedTexts.has("lxx"))
 		requestedTexts.add("wlc")
 
-	const ref = params.reference
+	let highlights = {}
+	if (params.hasOwnProperty("search_terms")) {
+		params.search_terms.forEach(st => {
+			highlights[st.uid] = _wordsThatMatchQuery(st.data, [ref.book], ref.chapter)
+		})
+	}
+
+
+	
 	const minv = book_names[ref.book] * 10000000 + ref.chapter * 1000
 	const maxv = book_names[ref.book] * 10000000 + (ref.chapter+1) * 1000
 	return new Promise((resolve, reject) => {
 		ridlistText(Array.from({length: maxv-minv}, (v, k) => k+minv), requestedTexts, db).then((texts) => {
-			resolve({
+			const returnVal = {
 				"reference": params.reference,
 				"text": texts
-			})
+			}
+			if (Object.keys(highlights).length > 0)
+				returnVal["highlights"] = highlights
+			resolve(returnVal)
 		}).catch((err) => {
 			reject(err)
 		})
