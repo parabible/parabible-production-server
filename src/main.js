@@ -103,11 +103,12 @@ app.post(['/api', '/api/*'], (req, res) => {
 })
 
 
+const clientRoot = process.env.PARABIBLE_CLIENT_DIR
 const getUrl = (mobile) => {
 	if (mobile)
-		return 'client/mobile.html'
+		return clientRoot + '/mobile.html'
 	else
-		return 'client/index.html'
+		return clientRoot + '/index.html'
 }
 const needsFonts = (userAgent) => {
 	// technically this is not mobile - it's whether or not to dump fonts into the index.html
@@ -136,7 +137,7 @@ const needsFonts = (userAgent) => {
 app.get("/", (req, res) => {
 	res.sendfile(getUrl(needsFonts(req.headers["user-agent"])))
 })
-app.use(express.static('client/'))
+app.use(express.static(clientRoot))
 app.get("*", (req, res) => {
 	res.sendfile(getUrl(needsFonts(req.headers["user-agent"])))
 })
