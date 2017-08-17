@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node build/main.js",
-    "dev": "npm run build && node build/main.js",
+    "dev": "npm run build && MONGO_CONNECTION_STRING='localhost:27017' MONGO_DATABASE='npmong' PARABIBLE_CLIENT_DIR='/home/jcuenod/Programming/uifabric-client/build/' node build/main.js",
     "build": "babel --presets es2015 --source-maps inline src -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

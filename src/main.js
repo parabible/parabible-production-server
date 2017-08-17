@@ -23,10 +23,12 @@ const declare_ready = (thing) => {
 	}
 }
 
-// const url = 'mongodb://localhost:27017/npmong'
-const url = 'mongodb://gcpadmin:thisisaninsecurepassword@127.0.0.1:27017/parabible'
+const mongoConnectionString = process.env.MONGO_CONNECTION_STRING
+const mongoDatabase = process.env.MONGO_DATABASE
+const mongoUrl = `mongodb://${mongoConnectionString}/${mongoDatabase}`
+
 let mongoConnection = null;
-MongoClient.connect(url, (err, db) => {
+MongoClient.connect(mongoUrl, (err, db) => {
 	if (err) {
 		console.log("Error setting up mongo connection")
 		console.log(err)
