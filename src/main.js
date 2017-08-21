@@ -4,8 +4,6 @@ import compression from 'compression'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-// ssl: http://blog.ayanray.com/2015/06/adding-https-ssl-to-express-4-x-applications/
-
 import { chapterText } from "./api/chapter-text"
 import { wordLookup } from "./api/word-lookup"
 import { termSearch, collocationSearch } from "./api/term-search"
