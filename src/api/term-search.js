@@ -43,7 +43,7 @@ const _doFilter = (filter, wordNodes, chapterFilter=0) => {
 const _wordsThatMatchQuery = (query, filter, chapterFilter=0) => {
 	let query_matches = []
 	Object.keys(query).forEach((k) => {
-		const v = query[k]
+		const v = query[k].normalize()
 		query_matches.push(_doFilter(filter, word_data[k][v], chapterFilter))
 	})
 	return arrayIntersect(...query_matches)
