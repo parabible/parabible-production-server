@@ -87,9 +87,9 @@ const termSearch = (params, db)=> {
 		const actual_matching_words_set = new Set(arrayIntersect(Array.prototype.concat(...word_matches), words_in_matching_ranges_set))
 
 		// Allowed texts
-		const paramTexts = params["texts"] || ["wlc"]
+		const paramTexts = params["texts"] || []
 		const allowedTexts = ["wlc", "net", "lxx"]
-		let textsToReturn = allowedTexts.filter(f => paramTexts.indexOf(paramTexts) !== -1)
+		let textsToReturn = allowedTexts.filter(f => paramTexts.indexOf(f) !== -1)
 		if (textsToReturn.length === 0)
 			textsToReturn = ["wlc", "net"]
 
