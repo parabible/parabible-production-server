@@ -20,6 +20,7 @@
     "compression": "^1.7.0",
     "cors": "^2.8.4",
     "express": "^4.15.3",
-    "mongodb": "^2.2.30"
+    "mongodb": "^2.2.30",
+    "winston": "^2.3.1"
   }
 }
