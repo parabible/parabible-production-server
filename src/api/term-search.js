@@ -86,9 +86,16 @@ const termSearch = (params, db)=> {
 		// consoleLog("BENCHMARK: getting matching word sets", process.hrtime(starttime))
 		const actual_matching_words_set = new Set(arrayIntersect(Array.prototype.concat(...word_matches), words_in_matching_ranges_set))
 
+		// Allowed texts
+		const paramTexts = params["texts"] || ["wlc"]
+		const allowedTexts = ["wlc", "net", "lxx"]
+		let textsToReturn = allowedTexts.filter(f => paramTexts.indexOf(paramTexts) !== -1)
+		if (textsToReturn.length === 0)
+			textsToReturn = ["wlc", "net"]
+
 		// consoleLog("BENCHMARK: now formulating final data", process.hrtime(starttime))
 		const ridmatches = range_matches.reduce((c, n) => c.concat(...range_node_data[n]["rids"]), [])
-		ridlistText(ridmatches, new Set(["wlc", "net"]), db).then((ridMatchText) => {
+		ridlistText(ridmatches, new Set(textsToReturn), db).then((ridMatchText) => {
 			Object.keys(ridMatchText).forEach(rid => {
 				ridMatchText[rid]["wlc"] = heatUpVerseWords(
 					ridMatchText[rid]["wlc"],
