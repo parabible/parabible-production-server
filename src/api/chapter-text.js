@@ -21,7 +21,6 @@ const ridlistText = (ridlist, requestedTextsSet, db) => {
 			}
 		})
 	})
-
 }
 
 const chapterText = (params, db) => {
