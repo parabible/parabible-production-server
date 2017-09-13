@@ -8,6 +8,8 @@ import { chapterText } from "./api/chapter-text"
 import { wordLookup } from "./api/word-lookup"
 import { termSearch, collocationSearch } from "./api/term-search"
 
+import Log from "./util/logging"
+
 let things = {
 	mongo: false,
 	express: false
@@ -55,6 +57,7 @@ app.post(['/api', '/api/*'], (req, res) => {
 	const api_request = req.params
 	const params = req.body
 	console.log(api_request[0])
+	Log({ api_request, params })
 
 	let responsePromise = new Promise((resolve, reject) => resolve())
 	switch(api_request[0]) {
