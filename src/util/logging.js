@@ -12,8 +12,6 @@ var logger = new (winston.Logger)({
 
 const Log = (message) => {
 	logger.log("info", message)
-	console.log("pushing to log?")
 }
-logger.log("info", "just a test")
-console.log("running test...")
+logger.log("info", "STARTING LOG FOR PID: " + process.pid)
 export default Log
