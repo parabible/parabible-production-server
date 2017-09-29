@@ -57,7 +57,7 @@ app.post(['/api', '/api/*'], (req, res) => {
 	const api_request = req.params
 	const params = req.body
 	console.log(api_request[0])
-	Log({ api_request, params })
+	Log({ api_request, params, ip_address: req.ip })
 
 	let responsePromise = new Promise((resolve, reject) => resolve())
 	switch(api_request[0]) {
