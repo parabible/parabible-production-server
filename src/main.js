@@ -50,6 +50,8 @@ let server = app.listen(port, host, () => {
 	declare_ready("express")
 })
 
+// Use X-Forwarded-For
+app.set('trust proxy', 'loopback')
 
 
 console.log("Setting up routes")
