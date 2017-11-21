@@ -18,7 +18,7 @@ const wordLookup = (params, db) => {
 					console.log("error with wid lookup")
 					reject(err)
 				}
-				if (!doc) {
+				if (!doc || !doc.hasOwnProperty("features")) {
 					console.log("no doc:", doc)
 					reject("wid not found")
 				}
