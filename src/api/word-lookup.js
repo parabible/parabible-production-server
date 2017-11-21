@@ -16,11 +16,11 @@ const wordLookup = (params, db) => {
 			const cursor = db.collection("word_data").findOne({ wid: params.wid }, (err, doc) => {
 				if (err) {
 					console.log("error with wid lookup")
-					reject(err)
+					return reject(err)
 				}
-				if (!doc || !doc.hasOwnProperty("features")) {
+				if (!doc) {
 					console.log("no doc:", doc)
-					reject("wid not found")
+					return reject("wid not found")
 				}
 				let features = doc["features"]
 				to_exclude.forEach(e => {
