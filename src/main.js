@@ -14,7 +14,7 @@ let things = {
 	mongo: false,
 	express: false
 }
-console.log("WAITING:", Object.keys(things).filter(k => things[k]))
+console.log("WAITING:", Object.keys(things))
 const declare_ready = (thing) => {
 	console.log("READY:", thing)
 	things[thing] = true
