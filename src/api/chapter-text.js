@@ -16,6 +16,8 @@ const ridlistText = (ridlist, requestedTextsSet, db) => {
 					ridlistResponse[doc["rid"]]["net"] = doc["net"]
 				if (requestedTextsSet.has("lxx"))
 					ridlistResponse[doc["rid"]]["lxx"] = doc["lxx"]
+				if (requestedTextsSet.has("sbl"))
+					ridlistResponse[doc["rid"]]["sbl"] = doc["sbl"]
 			} else {
 				resolve(ridlistResponse)
 			}
