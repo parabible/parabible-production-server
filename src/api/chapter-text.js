@@ -29,8 +29,9 @@ const chapterText = (params, db) => {
 	let requestedTexts = new Set(params["texts"] || [])
 	if (!requestedTexts.has("wlc") && 
 			!requestedTexts.has("net") && 
-			!requestedTexts.has("lxx"))
-		requestedTexts.add("wlc")
+			!requestedTexts.has("lxx") && 
+			!requestedTexts.has("sbl"))
+		requestedTexts.add("net")
 
 	let highlights = {}
 	if (params.hasOwnProperty("search_terms")) {
