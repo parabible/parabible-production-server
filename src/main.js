@@ -23,8 +23,17 @@ const declare_ready = (thing) => {
 	}
 }
 
-const mongoConnectionString = process.env.MONGO_CONNECTION_STRING
-const mongoDatabase = process.env.MONGO_DATABASE
+
+const requiredEnvVar = (variable) => {
+	if (!process.env.hasOwnProperty(variable)) {
+		console.log(`Sorry, we need "${variable}" to be set`)
+		process.exit()
+	}
+	return process.env[variable]
+}
+
+const mongoConnectionString = requiredEnvVar("MONGO_CONNECTION_STRING")
+const mongoDatabase = requiredEnvVar("MONGO_DATABASE")
 const mongoUrl = `mongodb://${mongoConnectionString}/${mongoDatabase}`
 
 let mongoConnection = null;
@@ -108,7 +117,8 @@ app.post(['/api', '/api/*'], (req, res) => {
 })
 
 
-const clientRoot = process.env.PARABIBLE_CLIENT_DIR
+// const clientRoot = "./client/build"
+const clientRoot = requiredEnvVar("PARABIBLE_CLIENT_DIR")
 const getUrl = (mobile) => {
 	if (mobile)
 		return '/mobile.html'
