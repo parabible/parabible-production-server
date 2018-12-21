@@ -6,17 +6,26 @@
   "scripts": {
     "start": "node build/main.js",
     "dev": "npm run build && MONGO_CONNECTION_STRING='localhost:27017' MONGO_DATABASE='parabible' PARABIBLE_CLIENT_DIR='/home/jcuenod/Programming/parabible-client/build/' node build/main.js",
-    "build": "babel --presets env --source-maps inline src -d build",
+    "build": "babel --source-maps inline src -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "James Cuénod",
   "license": "ISC",
+  "babel": {
+    "presets": [
+      ["@babel/preset-env", {
+        "targets": {
+          "node": "6.10"
+        }
+      }]
+    ]
+  },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.2.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.2",
     "cors": "^2.8.4",
