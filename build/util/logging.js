@@ -1,28 +1,29 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
+exports.default = void 0;
 
-var _winston = require('winston');
-
-var _winston2 = _interopRequireDefault(_winston);
+var _winston = _interopRequireDefault(require("winston"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var envTransport = [];
-envTransport.push(new _winston2.default.transports.File({ filename: 'log/output.log' }));
-var logger = new _winston2.default.Logger({
-	transports: envTransport
-});
-
-// console.log = () => {
+const envTransport = [];
+envTransport.push(new _winston.default.transports.File({
+  filename: 'log/output.log'
+}));
+var logger = new _winston.default.Logger({
+  transports: envTransport
+}); // console.log = () => {
 // 	throw new Error("You aren't allowed to use console.log; import logging.js instead.")
 // }
 
-var Log = function Log(message) {
-	logger.log("info", message);
+const Log = message => {
+  logger.log("info", message);
 };
+
 logger.log("info", "STARTING LOG FOR PID: " + process.pid);
-exports.default = Log;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL2xvZ2dpbmcuanMiXSwibmFtZXMiOlsiZW52VHJhbnNwb3J0IiwicHVzaCIsInRyYW5zcG9ydHMiLCJGaWxlIiwiZmlsZW5hbWUiLCJsb2dnZXIiLCJMb2dnZXIiLCJMb2ciLCJtZXNzYWdlIiwibG9nIiwicHJvY2VzcyIsInBpZCJdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUE7Ozs7OztBQUVBLElBQU1BLGVBQWUsRUFBckI7QUFDQUEsYUFBYUMsSUFBYixDQUFrQixJQUFLLGtCQUFRQyxVQUFSLENBQW1CQyxJQUF4QixDQUE4QixFQUFFQyxVQUFVLGdCQUFaLEVBQTlCLENBQWxCO0FBQ0EsSUFBSUMsU0FBUyxJQUFLLGtCQUFRQyxNQUFiLENBQXFCO0FBQ2pDSixhQUFZRjtBQURxQixDQUFyQixDQUFiOztBQUlBO0FBQ0E7QUFDQTs7QUFFQSxJQUFNTyxNQUFNLFNBQU5BLEdBQU0sQ0FBQ0MsT0FBRCxFQUFhO0FBQ3hCSCxRQUFPSSxHQUFQLENBQVcsTUFBWCxFQUFtQkQsT0FBbkI7QUFDQSxDQUZEO0FBR0FILE9BQU9JLEdBQVAsQ0FBVyxNQUFYLEVBQW1CLDJCQUEyQkMsUUFBUUMsR0FBdEQ7a0JBQ2VKLEciLCJmaWxlIjoibG9nZ2luZy5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB3aW5zdG9uIGZyb20gJ3dpbnN0b24nXG5cbmNvbnN0IGVudlRyYW5zcG9ydCA9IFtdXG5lbnZUcmFuc3BvcnQucHVzaChuZXcgKHdpbnN0b24udHJhbnNwb3J0cy5GaWxlKSh7IGZpbGVuYW1lOiAnbG9nL291dHB1dC5sb2cnIH0pKVxudmFyIGxvZ2dlciA9IG5ldyAod2luc3Rvbi5Mb2dnZXIpKHtcblx0dHJhbnNwb3J0czogZW52VHJhbnNwb3J0XG59KVxuXG4vLyBjb25zb2xlLmxvZyA9ICgpID0+IHtcbi8vIFx0dGhyb3cgbmV3IEVycm9yKFwiWW91IGFyZW4ndCBhbGxvd2VkIHRvIHVzZSBjb25zb2xlLmxvZzsgaW1wb3J0IGxvZ2dpbmcuanMgaW5zdGVhZC5cIilcbi8vIH1cblxuY29uc3QgTG9nID0gKG1lc3NhZ2UpID0+IHtcblx0bG9nZ2VyLmxvZyhcImluZm9cIiwgbWVzc2FnZSlcbn1cbmxvZ2dlci5sb2coXCJpbmZvXCIsIFwiU1RBUlRJTkcgTE9HIEZPUiBQSUQ6IFwiICsgcHJvY2Vzcy5waWQpXG5leHBvcnQgZGVmYXVsdCBMb2ciXX0=
+var _default = Log;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL2xvZ2dpbmcuanMiXSwibmFtZXMiOlsiZW52VHJhbnNwb3J0IiwicHVzaCIsIndpbnN0b24iLCJ0cmFuc3BvcnRzIiwiRmlsZSIsImZpbGVuYW1lIiwibG9nZ2VyIiwiTG9nZ2VyIiwiTG9nIiwibWVzc2FnZSIsImxvZyIsInByb2Nlc3MiLCJwaWQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBQTs7OztBQUVBLE1BQU1BLFlBQVksR0FBRyxFQUFyQjtBQUNBQSxZQUFZLENBQUNDLElBQWIsQ0FBa0IsSUFBS0MsaUJBQVFDLFVBQVIsQ0FBbUJDLElBQXhCLENBQThCO0FBQUVDLEVBQUFBLFFBQVEsRUFBRTtBQUFaLENBQTlCLENBQWxCO0FBQ0EsSUFBSUMsTUFBTSxHQUFHLElBQUtKLGlCQUFRSyxNQUFiLENBQXFCO0FBQ2pDSixFQUFBQSxVQUFVLEVBQUVIO0FBRHFCLENBQXJCLENBQWIsQyxDQUlBO0FBQ0E7QUFDQTs7QUFFQSxNQUFNUSxHQUFHLEdBQUlDLE9BQUQsSUFBYTtBQUN4QkgsRUFBQUEsTUFBTSxDQUFDSSxHQUFQLENBQVcsTUFBWCxFQUFtQkQsT0FBbkI7QUFDQSxDQUZEOztBQUdBSCxNQUFNLENBQUNJLEdBQVAsQ0FBVyxNQUFYLEVBQW1CLDJCQUEyQkMsT0FBTyxDQUFDQyxHQUF0RDtlQUNlSixHIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHdpbnN0b24gZnJvbSAnd2luc3RvbidcblxuY29uc3QgZW52VHJhbnNwb3J0ID0gW11cbmVudlRyYW5zcG9ydC5wdXNoKG5ldyAod2luc3Rvbi50cmFuc3BvcnRzLkZpbGUpKHsgZmlsZW5hbWU6ICdsb2cvb3V0cHV0LmxvZycgfSkpXG52YXIgbG9nZ2VyID0gbmV3ICh3aW5zdG9uLkxvZ2dlcikoe1xuXHR0cmFuc3BvcnRzOiBlbnZUcmFuc3BvcnRcbn0pXG5cbi8vIGNvbnNvbGUubG9nID0gKCkgPT4ge1xuLy8gXHR0aHJvdyBuZXcgRXJyb3IoXCJZb3UgYXJlbid0IGFsbG93ZWQgdG8gdXNlIGNvbnNvbGUubG9nOyBpbXBvcnQgbG9nZ2luZy5qcyBpbnN0ZWFkLlwiKVxuLy8gfVxuXG5jb25zdCBMb2cgPSAobWVzc2FnZSkgPT4ge1xuXHRsb2dnZXIubG9nKFwiaW5mb1wiLCBtZXNzYWdlKVxufVxubG9nZ2VyLmxvZyhcImluZm9cIiwgXCJTVEFSVElORyBMT0cgRk9SIFBJRDogXCIgKyBwcm9jZXNzLnBpZClcbmV4cG9ydCBkZWZhdWx0IExvZyJdfQ==

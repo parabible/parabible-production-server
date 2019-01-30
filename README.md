@@ -24,7 +24,7 @@ cd parabible-server
 npm install
 ```
 
-2. Build (technically not necessary right now because the build is included in the repository)
+2. Build. Technically you don't need to build to get parabible running because the latest build is included in the repository. Obviously you'll need to be able to build to contribute though.
 
 ```
 npm run build

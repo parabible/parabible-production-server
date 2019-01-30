@@ -47,6 +47,9 @@ const _wordsThatMatchQuery = (query, filter, chapterFilter=0) => {
 	let query_matches = []
 	Object.keys(query).forEach((k) => {
 		const v = query[k].normalize()
+		if (!word_data.hasOwnProperty(k) || !word_data[k].hasOwnProperty([v])) {
+			throw({"error":`Sorry but '${k}'='${v}' does not exist in the word data.`})
+		}
 		query_matches.push(_doFilter(filter, word_data[k][v], chapterFilter))
 	})
 	return arrayIntersect(...query_matches)
