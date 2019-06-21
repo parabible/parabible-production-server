@@ -1,6 +1,8 @@
 import book_names from '../../data/book_names.json'
 import { _wordsThatMatchQuery } from './term-search'
 
+import { sanitiseReference }  from '../util/sanitization'
+
 const allowedTexts = [
 	"wlc",
 	"net",
@@ -38,8 +40,9 @@ const ridlistText = (ridlist, unfilteredParamTexts, db) => {
 	})
 }
 
-const chapterText = (params, db) => {
-	const ref = params.reference
+const chapterText = async (params, db) => {
+	const ref = sanitiseReference(params.reference)
+	console.log("going on with", ref)
 	const unfilteredParamTexts = params["texts"] ? new Set(params["texts"]) : new Set([])
 
 	let highlights = {}

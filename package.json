@@ -13,17 +13,21 @@
   "license": "ISC",
   "babel": {
     "presets": [
-      ["@babel/preset-env", {
-        "targets": {
-          "node": "6.10"
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "6.10"
+          }
         }
-      }]
+      ]
     ]
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3"
+    "@babel/preset-env": "^7.2.3",
+    "babel-preset-env": "^1.7.0"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
