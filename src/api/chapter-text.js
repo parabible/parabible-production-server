@@ -1,7 +1,8 @@
 import book_names from '../../data/book_names.json'
 import { _wordsThatMatchQuery } from './term-search'
 
-import { sanitiseReference }  from '../util/sanitization'
+import { sanitiseReference } from '../util/sanitization'
+import { convertSetToArray } from '../util/util'
 
 const allowedTexts = [
 	"wlc",
@@ -17,7 +18,7 @@ const ridlistText = (ridlist, unfilteredParamTexts, db) => {
 	const requestedTextsSet = new Set(filteredTextList)
 
 	return new Promise((resolve, reject) => {
-		let ridlistResponse = {}
+		let ridlistResponse = []
 		//TODO: change "in" to {$gte: min, $lt: max}
 		//[or at least make it a possibilty
 		// - we need the ridlist idea for search results
@@ -27,12 +28,13 @@ const ridlistText = (ridlist, unfilteredParamTexts, db) => {
 			if (err)
 				console.log("ERROR", err)
 			if (doc != null) {
-				ridlistResponse[doc["rid"]] = {}
+				const row = { "rid": +doc["rid"] }
 				requestedTextsSet.forEach(text => {
 					if (doc.hasOwnProperty(text)) {
-						ridlistResponse[doc["rid"]][text] = doc[text]
+						row[text] = doc[text]
 					}
 				})
+				ridlistResponse.push(row)
 			} else {
 				resolve(ridlistResponse)
 			}
@@ -53,9 +55,9 @@ const chapterText = async (params, db) => {
 	}
 
 	const minv = book_names[ref.book] * 10000000 + ref.chapter * 1000
-	const maxv = book_names[ref.book] * 10000000 + (ref.chapter+1) * 1000
+	const maxv = book_names[ref.book] * 10000000 + (ref.chapter + 1) * 1000
 	return new Promise((resolve, reject) => {
-		ridlistText(Array.from({length: maxv-minv}, (v, k) => k+minv), unfilteredParamTexts, db).then((texts) => {
+		ridlistText(Array.from({ length: maxv - minv }, (v, k) => k + minv), unfilteredParamTexts, db).then((texts) => {
 			const returnVal = {
 				"reference": params.reference,
 				"text": texts
