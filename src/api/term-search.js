@@ -17,7 +17,7 @@ const consoleLog = (...debug) => {
 }
 
 const heatUpVerseWords = (verse_words, hot_set, lukewarm_set) => {
-	return verse_words.map(accentUnit => 
+	return verse_words.map(accentUnit =>
 		accentUnit.map(w => {
 			if (hot_set.has(w["wid"]))
 				w["temperature"] = 2
@@ -28,7 +28,7 @@ const heatUpVerseWords = (verse_words, hot_set, lukewarm_set) => {
 	)
 }
 
-const _doFilter = (filter, wordNodes, chapterFilter=0) => {
+const _doFilter = (filter, wordNodes, chapterFilter = 0) => {
 	if (filter.length > 0) {
 		const chapterOffset = chapterFilter * 1000
 		const ridFilter = filter.map(f => book_names[f] * 10000000 + chapterOffset)
@@ -43,18 +43,18 @@ const _doFilter = (filter, wordNodes, chapterFilter=0) => {
 		return wordNodes
 	}
 }
-const _wordsThatMatchQuery = (query, filter, chapterFilter=0) => {
+const _wordsThatMatchQuery = (query, filter, chapterFilter = 0) => {
 	let query_matches = []
 	Object.keys(query).forEach((k) => {
 		const v = query[k].normalize()
 		if (!word_data.hasOwnProperty(k) || !word_data[k].hasOwnProperty([v])) {
-			throw({"error":`Sorry but '${k}'='${v}' does not exist in the word data.`})
+			throw ({ "error": `Sorry but '${k}'='${v}' does not exist in the word data.` })
 		}
 		query_matches.push(_doFilter(filter, word_data[k][v], chapterFilter))
 	})
 	return arrayIntersect(...query_matches)
 }
-const _queryForWids = ({queryArray, search_range, search_filter}) => {
+const _queryForWids = ({ queryArray, search_range, search_filter }) => {
 	let word_matches = []
 	let exclusions = []
 	let current_match = -1
@@ -76,27 +76,27 @@ const _queryForWids = ({queryArray, search_range, search_filter}) => {
 	const range_matches = arrayDiff(match_intersection, sr_exclusions)
 
 	consoleLog("BENCHMARK Q: done intersecting", process.hrtime(starttime))
-	const word_match_indices_map = word_matches.map(w => w.reduce((a,v) => {
+	const word_match_indices_map = word_matches.map(w => w.reduce((a, v) => {
 		if (!a.hasOwnProperty(tree_data[v][search_range]))
 			a[tree_data[v][search_range]] = []
 		a[tree_data[v][search_range]].push(v)
 		return a
 	}, {}))
 	const range_matches_with_unique_limit = range_matches.map((r, i) => {
-			const word_match_indices = word_match_indices_map.map((w, i) => w[r])
-			const should_include = uniqueValuePerArray(word_match_indices) ? word_match_indices : false
-			return {
-				sr_node: r,
-				matching_word_nodes: should_include
-			}
-		})
+		const word_match_indices = word_match_indices_map.map((w, i) => w[r])
+		const should_include = uniqueValuePerArray(word_match_indices) ? word_match_indices : false
+		return {
+			sr_node: r,
+			matching_word_nodes: should_include
+		}
+	})
 		.filter(m => m && m.matching_word_nodes !== false)
 	consoleLog("BENCHMARK Q: query el indep. repr.", process.hrtime(starttime))
 	consoleLog("RESULTS:", range_matches_with_unique_limit.length)
 	return range_matches_with_unique_limit
 }
 
-const termSearch = (params, db)=> {
+const termSearch = (params, db) => {
 	return new Promise((resolve, reject) => {
 		let starttime = process.hrtime()
 		consoleLog("BENCHMARK: **querying for WIDS", process.hrtime(starttime))
@@ -112,7 +112,7 @@ const termSearch = (params, db)=> {
 		}
 		consoleLog("BENCHMARK: **getting matching word sets", process.hrtime(starttime))
 		const words_in_matching_ranges_set = new Set(matches.reduce((c, m) => c.concat(...range_node_data[m.sr_node]["wids"]), []))
-		const all_word_matches = matches.reduce((c,n) => c.concat(...n.matching_word_nodes), [])
+		const all_word_matches = matches.reduce((c, n) => c.concat(...n.matching_word_nodes), [])
 		const actual_matching_words_set = new Set(arrayIntersect(all_word_matches, words_in_matching_ranges_set))
 
 		// Allowed texts
@@ -125,23 +125,24 @@ const termSearch = (params, db)=> {
 		consoleLog("BENCHMARK: **now formulating final data", process.hrtime(starttime))
 		const ridmatches = matches.reduce((c, n) => c.concat(...range_node_data[n.sr_node]["rids"]), [])
 		ridlistText(ridmatches, new Set(textsToReturn), db).then((ridMatchText) => {
-			Object.keys(ridMatchText).forEach(rid => {
-				ridMatchText[rid]["wlc"] = heatUpVerseWords(
-					ridMatchText[rid]["wlc"],
+			const heatedMatchText = ridMatchText.map(matchingObject => {
+				matchingObject["wlc"] = heatUpVerseWords(
+					matchingObject["wlc"],
 					actual_matching_words_set,
 					words_in_matching_ranges_set
 				)
+				return matchingObject
 			})
 			consoleLog("BENCHMARK: **results now being processed", process.hrtime(starttime))
 			const match_result_data = matches.map((m) => {
-				const ridTextObject = {}
+				const ridTextArray = []
 				range_node_data[m.sr_node]["rids"].forEach(rid => {
-					ridTextObject[rid] = ridMatchText[rid]
+					ridTextArray.push(heatedMatchText.find(t => t.rid === rid))
 				})
 				return {
 					"node": m.sr_node,
 					"verses": range_node_data[m.sr_node]["rids"],
-					"text": ridTextObject
+					"text": ridTextArray
 				}
 			})
 
@@ -156,7 +157,7 @@ const termSearch = (params, db)=> {
 	})
 }
 
-const collocationSearch = (params)=> {
+const collocationSearch = (params) => {
 	const grouping_key = "voc_utf8"
 	return new Promise((resolve, reject) => {
 		// TODO: the syntax of _queryForWids has changed since this line...
@@ -166,7 +167,7 @@ const collocationSearch = (params)=> {
 			search_range: params["search_range"]
 		})
 		// params["whitelist"] == ["Verb"]
-		const word_match_morph= word_matches.map(wid => word_data[wid][grouping_key])
+		const word_match_morph = word_matches.map(wid => word_data[wid][grouping_key])
 		const tally_match_data = word_match_morph.reduce((c, k) => {
 			if (!c.hasOwnProperty(k))
 				c[k] = 0

@@ -110,7 +110,7 @@ app.post(['/api', '/api/*'], (req, res) => {
 	responsePromise.then((response) => {
 		res.send(response)
 	}).catch((response) => {
-		res.send(response)
+		res.status(500).send(response)
 		console.log("error")
 		console.log(response)
 	})
